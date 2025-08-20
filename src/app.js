@@ -1,17 +1,18 @@
 import express from 'express'
+import conexao from '../infra/conexao.js'
 const app = express()
 
 //indicar para o express ler o body como json
 app.use(express.json())
 
-const cursos = [
-    {id:1, disciplinas: 'ADS'},
-    {id:2, disciplinas: 'ADS'},
-    {id:3, disciplinas: 'ADS'},
-    {id:4, disciplinas: 'ADS'}
-]
+// const cursos = [
+//     {id:1, disciplinas: 'ADS'},
+//     {id:2, disciplinas: 'ADS'},
+//     {id:3, disciplinas: 'ADS'},
+//     {id:4, disciplinas: 'ADS'}
+// ]
 
-// Criando uma rota default (endpoint)
+
 
 function buscarCursosPorId(id) {
     return cursos.filter( curso => curso.id == id)
@@ -21,12 +22,22 @@ function buscarIndexCurso(id) {
     return cursos.findIndex( curso => curso.id == id)
 }
 
-app.get('/', (req, res) => {
-    res.send('Hello')
-})
+// Criando uma rota default (endpoint)
+// app.get('/', (req, res) => {
+//     res.send('Hello')
+// })
 
-app.get('/cursos', (req, res) => {
-    res.status(200).send(cursos)
+//ROTAS
+app.get('/materias', (req, res) => {
+    // res.status(200).send(cursos)
+    const sql = "select * from curso;"
+    conexao.query(sql, (error, result) => {
+        if (error) {
+            console.log(error)
+        } else {
+            res.status(200).json(result)
+        }
+    })
 })
 
 app.post('/cursos', (req, res) => {
